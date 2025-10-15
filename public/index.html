@@ -3,9 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Uyghur Text-to-Speech</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-   <h1>Hello World!</h1> 
+    <h1>ئۇيغۇرچە تىكىستتىن ئاۋازغا</h1>
+    <div class="form-container">
+        <form id="ttsForm">
+            <textarea name="text" id="inputarea" rows="4" placeholder="Enter text to synthesize" required>ھەممە ئادەم ئەركىن بولۇپ تۇغۇلىدۇ، ھەمدە ئىززەت-ھۆرمەت ۋە ھوقۇقتا باب باراۋەر بولىدۇ.</textarea>
+            <div id="wordCount">جەت: 0 / 100</div>
+            <select name="model" required>
+                <option value="piyazon/TTS-CV-Radio-RVC-Alikurban-Ug">ئەلى</option>
+                <option value="piyazon/TTS-CV-Unique-Ug-2">مەقسۇم</option>
+                <option value="piyazon/TTS-Radio-Ug">ئابدۇقادىر ھاشىم</option>
+                <option value="piyazon/TTS-Radio-Girl-Ug">گۈزەلنۇر روزى</option>
+                <option value="piyazon/qutadgu_bilik">ئەر 1</option>
+                <option value="facebook/mms-tts-uig-script_arabic">ئەر 2</option>
+            </select>
+            <button type="submit" id="synthesizeBtn">ئاۋازغا
+                <div class="loading-animation"></div>
+            </button>
+        </form>
+        <audio id="audioPlayer" controls style="display: none;"></audio>
+        <div id="error"></div>
+    </div>
+
+    <script src="tts.js"></script>
 </body>
+
 </html>

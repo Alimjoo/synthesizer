@@ -2,9 +2,13 @@ import express from 'express';
 import multer from 'multer';
 import axios from 'axios';
 import FormData from 'form-data';
+import fetch from 'node-fetch'; // Add node-fetch for streaming binary responses
+import { createWriteStream } from 'fs';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import dotenv from 'dotenv';
+import { pipeline } from 'stream';
+import { promisify } from 'util';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -23,23 +27,6 @@ if (!HF_TOKEN) {
   process.exit(1);
 }
 
-// Supported audio MIME types
-const ALLOWED_MIME_TYPES = ['audio/wav', 'audio/mpeg', 'audio/webm', 'audio/x-wav', 'audio/mp4', 'audio/webm;codecs=opus', 'audio/x-m4a'];
-
-// Configure multer to store files in memory
-const upload = multer({
-    storage: multer.memoryStorage(),
-    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
-    fileFilter: (req, file, cb) => {
-        if (ALLOWED_MIME_TYPES.includes(file.mimetype)) {
-            cb(null, true);
-        } else {
-            console.log('Rejected file type:', file.mimetype);
-            cb(new Error(`Invalid file type. Only ${ALLOWED_MIME_TYPES.join(', ')} are allowed.`));
-        }
-    },
-});
-
 // Middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -47,13 +34,58 @@ app.use(express.static(__dirname));
 app.use(express.static(path.join(__dirname, '../public')));
 
 
+const API_URL = 'https://piyazon-ug-tts-api.hf.space/synthesize';
+
+// New POST endpoint to proxy the TTS synthesis
+app.post('/tts', async (req, res) => {
+    const { text, model } = req.body;
+
+    if (!text) {
+        return res.status(400).json({ error: 'Missing required field: text' });
+    }
+
+    const form = new FormData();
+    form.append('text', text);
+    form.append('model', model);
+    form.append('hf_token', HF_TOKEN);
+
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            body: form,
+            headers: form.getHeaders(),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`API error: ${response.status} - ${errorText}`);
+        }
+
+        // Set headers for audio response
+        res.setHeader('Content-Type', 'audio/wav');
+        res.setHeader('Content-Disposition', 'attachment; filename=speech.wav');
+
+        // Stream the response directly to the client
+        const streamPipeline = promisify(pipeline);
+        await streamPipeline(response.body, res);
+    } catch (error) {
+        console.error('TTS synthesis error:', error);
+        res.status(500).json({ error: error.message || 'Internal server error' });
+    }
+});
 
 
 
-
-
-
-
+// Optional: Example GET route for testing or serving a form
+app.get('/tts-test', (req, res) => {
+    res.send(`
+        <form action="/tts" method="POST">
+            <label>Text: <input type="text" name="text" value="ھەممە ئادەم ئەركىن بولۇپ تۇغۇلىدۇ، ھەمدە ئىززەت-ھۆرمەت ۋە ھوقۇقتا باب باراۋەر بولىدۇ." /></label><br/>
+            <label>Model: <input type="text" name="model" value="piyazon/TTS-Radio-Girl-Ug" /></label><br/>
+            <button type="submit">Synthesize</button>
+        </form>
+    `);
+});
 
 
 
