@@ -1,0 +1,31 @@
+{
+  "name": "synthesizer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alimjoo/synthesizer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alimjoo/synthesizer/issues"
+  },
+  "homepage": "https://github.com/Alimjoo/synthesizer#readme",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.12.2",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "FormData": "^0.10.1",
+    "multer": "^2.0.2",
+    "nodemon": "^3.1.10"
+  },
+  "type": "module"
+}
