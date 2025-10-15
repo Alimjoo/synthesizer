@@ -35,6 +35,9 @@ textarea, select, input, button {
     font-family: 'sf-arabic';
     direction: rtl;
 }
+textarea{
+    resize: none;
+}
 textarea:not(:placeholder-shown) {
     height: 120px; /* Larger height when user types or holds value */
 }
