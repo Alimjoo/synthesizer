@@ -158,7 +158,7 @@ label {
     direction: rtl;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 650px) {
       body {
         padding: 15px;
     }
