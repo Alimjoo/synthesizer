@@ -159,6 +159,9 @@ label {
 }
 
 @media (max-width: 600px) {
+      body {
+        padding: 15px;
+    }
     .selected_title{
         gap: 5px;
     }
