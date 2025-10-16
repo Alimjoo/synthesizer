@@ -1,19 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uyghur Text-to-Speech</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5TT3J7DQC7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-5TT3J7DQC7');
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Uyghur Text To Speech</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="./favicon/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="./favicon/favicon.svg" />
+    <link rel="shortcut icon" href="./favicon/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./favicon/apple-touch-icon.png"
+    />
+    <meta name="apple-mobile-web-app-title" content="Piyazon 翻译" />
+    <link rel="manifest" href="./favicon/site.webmanifest" />
+
+    <!-- Add meta tags for PWA installation -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <h1>ئۇيغۇرچە تىكىستتىن ئاۋازغا</h1>
+    <div class="selected_title">
+        <h5><a id="seleted_a" href="https://synthesizer.piyazon.top/">ئۇيغۇرچە تىكىستتىن ئاۋازغا</a></h5>
+        <h5><a id="unselected_a" href="https://transcriber.piyazon.top/">ئۇيغۇرچە ئاۋازدىن تېكىستكە</a></h5>
+    </div>
     <div class="form-container">
         <form id="ttsForm">
-            <textarea name="text" id="inputarea" rows="4" placeholder="تىكىست كىرگۈزۈپ ئاۋازغا ئايلاندۇرۇڭ..." required>ھەممە ئادەم ئەركىن بولۇپ تۇغۇلىدۇ، ھەمدە ئىززەت-ھۆرمەت ۋە ھوقۇقتا باب باراۋەر بولىدۇ.</textarea>
-            <div id="wordCount">جەت: 0 / 100</div>
-            <select name="model" required>
+            <textarea name="text" id="inputarea" rows="4" placeholder="تىكىست كىرگۈزۈپ ئاۋازغا ئايلاندۇرۇڭ..." required></textarea>
+            <div id="wordCount">سۆز: 0 / 100</div>
+            <select name="model" id="modelSelect" required>
                 <option value="piyazon/TTS-CV-Radio-RVC-Alikurban-Ug">ئەلى</option>
                 <option value="piyazon/TTS-CV-Unique-Ug-2">مەقسۇم</option>
                 <option value="piyazon/TTS-Radio-Ug">ئابدۇقادىر ھاشىم</option>
@@ -27,6 +60,53 @@
         </form>
         <audio id="audioPlayer" controls style="display: none;"></audio>
         <div id="error"></div>
+    </div>
+
+    <!-- Added examples table -->
+    <div class="examples-section" dir="rtl" style="margin-top: 20px;">
+        <h3>مىسال تېكىستلار ۋە ئاۋازلار:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>تېكىست</th>
+                    <th>ئاۋاز</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="example-row" data-text="بىر ئامېرىكا دوللىرىنى ئالماشتۇرۇش قىممىتى 371.25 گىرىن (تەخمىنەن 24.057 گرام) ساپ كۈمۈش ياكى 24.75 گىرىن (تەخمىنەن 1.6038 گرام) ساپ ئالتۇن بولۇپ ، 1873-يىلىغىچە داۋاملاشقان." data-model="piyazon/TTS-CV-Radio-RVC-Alikurban-Ug">
+                    <td>بىر ئامېرىكا دوللىرىنى ئالماشتۇرۇش قىممىتى 371.25 گىرىن (تەخمىنەن 24.057 گرام) ساپ كۈمۈش ياكى 24.75 گىرىن (تەخمىنەن 1.6038 گرام) ساپ ئالتۇن بولۇپ ، 1873-يىلىغىچە داۋاملاشقان.</td>
+                    <td>ئەلى</td>
+                </tr>
+                <tr class="example-row" data-text="ھەممە ئادەم ئەركىن بولۇپ تۇغۇلىدۇ، ھەمدە ئىززەت-ھۆرمەت ۋە ھوقۇقتا باب باراۋەر بولىدۇ." data-model="piyazon/TTS-CV-Unique-Ug-2">
+                    <td>ھەممە ئادەم ئەركىن بولۇپ تۇغۇلىدۇ، ھەمدە ئىززەت-ھۆرمەت ۋە ھوقۇقتا باب باراۋەر بولىدۇ.</td>
+                    <td>مەقسۇم</td>
+                </tr>
+                <tr class="example-row" data-text="مەركەز ئورگانلىرى ۋە مەركەزگە بىۋاسىتە قاراشلىق ئاپپاراتلارغا 2026-يىللىق ئىمتىھان ئارقىلىق مەمۇر قوبۇل قىلىش خىزمىتى ئەتە باشلىنىدۇ، جەمئىي 38 مىڭ 100 ئادەم قوبۇل قىلىش پىلانلاندى." data-model="piyazon/TTS-Radio-Ug">
+                    <td>مەركەز ئورگانلىرى ۋە مەركەزگە بىۋاسىتە قاراشلىق ئاپپاراتلارغا 2026-يىللىق ئىمتىھان ئارقىلىق مەمۇر قوبۇل قىلىش خىزمىتى ئەتە باشلىنىدۇ، جەمئىي 38 مىڭ 100 ئادەم قوبۇل قىلىش پىلانلاندى.</td>
+                    <td>ئابدۇقادىر ھاشىم</td>
+                </tr>
+                <tr class="example-row" data-text="بۇ پىلان مەن كېچە-كۈندۈز ئارزۇ قىلىپ كېلىۋاتقان ئۈچ چوڭ نىشانىمنى ئۆز ئىچىگە ئالىدۇ، ئۇلار ھاياتىمدىكى ئەڭ چوك ئارمانلىرىم ئىدى." data-model="piyazon/TTS-Radio-Girl-Ug">
+                    <td>بۇ پىلان مەن كېچە-كۈندۈز ئارزۇ قىلىپ كېلىۋاتقان ئۈچ چوڭ نىشانىمنى ئۆز ئىچىگە ئالىدۇ، ئۇلار ھاياتىمدىكى ئەڭ چوك ئارمانلىرىم ئىدى.</td>
+                    <td>گۈزەلنۇر روزى</td>
+                </tr>
+                <tr class="example-row" data-text="بۇ دۆلەت مەمۇرلۇق ئىمتىھانىنىڭ ياش چەكلىمىسى تۇنجى قېتىم 35 ياشلىق ياش چەكلىمىسىنى بۇزۇپ تاشلىغانلىقىدىن دېرەك بېرىدۇ." data-model="piyazon/qutadgu_bilik">
+                    <td>بۇ دۆلەت مەمۇرلۇق ئىمتىھانىنىڭ ياش چەكلىمىسى تۇنجى قېتىم 35 ياشلىق ياش چەكلىمىسىنى بۇزۇپ تاشلىغانلىقىدىن دېرەك بېرىدۇ.</td>
+                    <td>ئەر 1</td>
+                </tr>
+                <tr class="example-row" data-text="بىز ئىنسانلارنىڭ ھەممىسى بىرلىكتە ياشايمىز. ھەر بىر ئادەم ئۆزىنىڭ يولىنى تاللىيالايدۇ." data-model="facebook/mms-tts-uig-script_arabic">
+                    <td>بىز ئىنسانلارنىڭ ھەممىسى بىرلىكتە ياشايمىز. ھەر بىر ئادەم ئۆزىنىڭ يولىنى تاللىيالايدۇ.</td>
+                    <td>ئەر 2</td>
+                </tr>
+                <tr class="example-row" data-text="你好 دىگەن سۆزنىڭ ئۇيغۇرچە مەنىسى بولسا «ياخشىمۇسىز»." data-model="piyazon/TTS-CV-Radio-RVC-Alikurban-Ug">
+                    <td>你好 دىگەن سۆزنىڭ ئۇيغۇرچە مەنىسى بولسا «ياخشىمۇسىز».</td>
+                    <td>ئەلى</td>
+                </tr>
+                <tr class="example-row" data-text="« ئوكسفورد ئىنگلىز تىلى لۇغىتى» گە ئاساسلانغاندا، « دەرىجىدىن تاشقىرى چوڭ دۆلەت (superpow) » دېگەن بۇ ئاتالغۇ ئەڭ بۇرۇن 1930-يىلى تىلغا ئېلىنغان. ئىنگلىز تىلىدىكى بۇ ئاتالغۇ بىرقەدەر بۇرۇنقى« powers» (يەنى« كۈچلۈك دۆلەتلەر» ) ۋە« great power» (يەنى« چوڭ دۆلەت» ) دىن كەلگەن. " data-model="piyazon/TTS-Radio-Ug">
+                    <td>« ئوكسفورد ئىنگلىز تىلى لۇغىتى» گە ئاساسلانغاندا، « دەرىجىدىن تاشقىرى چوڭ دۆلەت (superpow) » دېگەن بۇ ئاتالغۇ ئەڭ بۇرۇن 1930-يىلى تىلغا ئېلىنغان. ئىنگلىز تىلىدىكى بۇ ئاتالغۇ بىرقەدەر بۇرۇنقى« powers» (يەنى« كۈچلۈك دۆلەتلەر» ) ۋە« great power» (يەنى« چوڭ دۆلەت» ) دىن كەلگەن. </td>
+                    <td>ئابدۇقادىر ھاشىم</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <script src="tts.js"></script>

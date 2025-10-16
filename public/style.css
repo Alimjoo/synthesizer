@@ -8,12 +8,13 @@
 /* Inline fallback styles if style.css is missing */
 body {
     font-family: 'sf-arabic';
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
-    padding: 20px;
-    background-color: #f5f5f5;
+    padding: 30px;
+    background: linear-gradient(135deg, #f0f4f8 0%, #e6ecef 100%);
+    color: #2c3e50;
 }
-h1 {
+h1, h5 {
     color: #333;
     direction: rtl;
     font-weight: normal;
@@ -37,12 +38,13 @@ textarea, select, input, button {
 }
 textarea{
     resize: none;
+    field-sizing: content;
+    min-height: 100px;
+    margin-bottom: 0px;
 }
-textarea:not(:placeholder-shown) {
-    height: 120px; /* Larger height when user types or holds value */
-}
+
 button {
-    background-color: #007bff;
+    background-color: #3498db;
     color: white;
     border: none;
     cursor: pointer;
@@ -86,11 +88,63 @@ button.loading .loading-animation {
     100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* Optional: Counter styles for word limit */
-#wordCount {
-    text-align: left;
-    font-size: 14px;
-    color: #666;
+#wordCount{
     margin-bottom: 10px;
-    direction: ltr; /* Left-to-right for counter */
+}
+
+.selected_title {
+    display: flex;
+    justify-content: center; /* Align titles side by side and centered if needed */
+    align-items: center;
+    gap: 20px; /* Space between the titles */
+}
+
+.selected_title h5 {
+    margin: 0;
+    font-size: 24px; /* Adjust size as needed */
+}
+
+.selected_title h5 a {
+    text-decoration: none; /* Remove underline from links */
+    color: inherit; /* Keep original text color */
+    display: block;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.selected_title #seleted_a {
+    background-color: #007bff; /* Highlight the first title/link */
+    color: white;
+}
+
+.selected_title #seleted_a:hover {
+    background-color: #0056b3; /* Optional: Change highlight on hover */
+}
+
+.selected_title #unselected_a:hover {
+    background-color: #0056b3; /* Change background on hover for the second link */
+    color: white; /* Optional: Improve contrast on dark hover background */
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+    direction: rtl;
+    text-align: right;
+}
+th {
+    background-color: #f0f0f0;
+}
+tr.example-row {
+    cursor: pointer;
+}
+tr.example-row:hover {
+    background-color: #f9f9f9;
 }

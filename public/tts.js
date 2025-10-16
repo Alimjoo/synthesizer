@@ -14,7 +14,7 @@ const updateWordCount = () => {
     const text = textarea.value.trim();
     const words = text.split(/\s+/).filter(word => word.length > 0);
     const count = words.length;
-    wordCountDiv.textContent = `خەت: ${count} / ${WORD_LIMIT}`;
+    wordCountDiv.textContent = `سۆز: ${count} / ${WORD_LIMIT}`;
     if (count > WORD_LIMIT) {
         wordCountDiv.style.color = 'red';
     } else {
@@ -31,13 +31,27 @@ textarea.addEventListener('input', () => {
         const limitedWords = words.slice(0, WORD_LIMIT);
         textarea.value = limitedWords.join(' ');
         updateWordCount();
-        alert(`Word limit exceeded! Truncated to ${WORD_LIMIT} words.`);
+        alert(`سۆز سانى چەكتىن ئېشىپ كەتتى! ${WORD_LIMIT} سۆزگە قىسقارتىلدى.`);
     }
     updateWordCount();
 });
 
 // Initial count
 updateWordCount();
+
+document.querySelectorAll('.example-row').forEach(row => {
+    row.addEventListener('click', () => {
+        const text = row.getAttribute('data-text');
+        const model = row.getAttribute('data-model');
+        
+        document.getElementById('inputarea').value = text;
+        document.getElementById('modelSelect').value = model;
+        
+        updateWordCount();
+        // Optional: Update word count if your tts.js has that logic
+        // You can trigger any existing word count function here if needed
+    });
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('ttsForm');
@@ -97,3 +111,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+
