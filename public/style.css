@@ -158,3 +158,11 @@ label {
     direction: rtl;
 }
 
+@media (max-width: 600px) {
+    .selected_title{
+        gap: 5px;
+    }
+    .selected_title h5 {
+        font-size: 16px; /* Adjust size as needed */
+    }
+}
