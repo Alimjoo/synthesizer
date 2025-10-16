@@ -158,8 +158,8 @@ label {
     direction: rtl;
 }
 
-@media (max-width: 650px) {
-      body {
+@media (max-width: 600px) {
+    body {
         padding: 15px;
     }
     .selected_title{
