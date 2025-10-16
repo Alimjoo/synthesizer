@@ -148,3 +148,12 @@ tr.example-row {
 tr.example-row:hover {
     background-color: #f9f9f9;
 }
+
+label {
+    display: block;
+    font-size: 1.1rem;
+    color: #34495e;
+    margin-bottom: 0.5rem;
+    text-align: right;
+}
+
