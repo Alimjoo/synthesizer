@@ -155,5 +155,6 @@ label {
     color: #34495e;
     margin-bottom: 0.5rem;
     text-align: right;
+    direction: rtl;
 }
 
