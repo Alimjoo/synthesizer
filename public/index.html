@@ -1,32 +1,24 @@
 <!DOCTYPE html>
 <html lang="ug">
+
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5TT3J7DQC7"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-    gtag('config', 'G-5TT3J7DQC7');
+        gtag('config', 'G-5TT3J7DQC7');
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Uyghur Text To Speech</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="icon"
-      type="image/png"
-      href="./favicon/favicon-96x96.png"
-      sizes="96x96"
-    />
+    <link rel="icon" type="image/png" href="./favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="./favicon/favicon.svg" />
     <link rel="shortcut icon" href="./favicon/favicon.ico" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="./favicon/apple-touch-icon.png"
-    />
+    <link rel="apple-touch-icon" sizes="180x180" href="./favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Piyazon 翻译" />
     <link rel="manifest" href="./favicon/site.webmanifest" />
 
@@ -46,19 +38,45 @@
         <form id="ttsForm">
             <p id="warning">
                 <span style="color: red;">ئىزاھات:</span>
-                 بۇ پەقەت بىر سىناق، نەشر ھوقۇقى مەسىلىسىنى كۆزدە تۇتۇپ، بۇ تور بېكەتتە ھاسىل قىلىنغان ئاۋازنى شەخسىي ياكى سودا تۈرلىرىگە ئىشلىتىشكە بولمايدۇ!
+                بۇ پەقەت بىر سىناق، نەشر ھوقۇقى مەسىلىسىنى كۆزدە تۇتۇپ، بۇ تور بېكەتتە ھاسىل قىلىنغان ئاۋازنى شەخسىي
+                ياكى سودا تۈرلىرىگە ئىشلىتىشكە بولمايدۇ!
             </p>
-            <textarea name="text" id="inputarea" rows="4" placeholder="تىكىست كىرگۈزۈپ ئاۋازغا ئايلاندۇرۇڭ..." required></textarea>
-            <div id="wordCount">سۆز: 0 / 100</div>
-            <label for="model_id">ئاۋاز تاللاڭ:</label>
-            <select name="model" id="modelSelect" required>
-                <!-- <option value="piyazon/TTS-CV-Radio-RVC-Alikurban-Ug">ئەلى</option> -->
-                <option value="piyazon/TTS-CV-Unique-Ug-2">مەقسۇم</option>
-                <!-- <option value="piyazon/TTS-Radio-Ug">ئابدۇقادىر ھاشىم</option>
-                <option value="piyazon/TTS-Radio-Girl-Ug">گۈزەلنۇر روزى</option> -->
-                <option value="piyazon/qutadgu_bilik">ئەر 1</option>
-                <option value="facebook/mms-tts-uig-script_arabic">ئەر 2</option>
+            <textarea name="text" id="inputarea" rows="4" placeholder="تىكىست كىرگۈزۈپ ئاۋازغا ئايلاندۇرۇڭ..."
+                required></textarea>
+            <div id="wordCount">سۆز: 0 / 30</div>
+
+            <label for="modeSelect">قۇرۇلمىنى تاللاڭ:</label>
+            <select name="mode" id="modeSelect" required>
+                <option value="VITS">VITS</option>
+                <option value="VV">VV</option>
             </select>
+
+            <label for="model_id">ئاۋاز تاللاڭ:</label>
+
+            <!-- VITS بۆلىكى (دەسلەپتە كۆرۈنىدۇ) -->
+            <div class="for_vits visible">
+                <select name="model" id="modelSelectVits" required>
+                    <option value="piyazon/TTS-CV-Unique-Ug-2">مەقسۇم</option>
+                    <option value="piyazon/TTS-CV-Radio-RVC-Alikurban-Ug">ئەلى</option>
+                    <option value="piyazon/qutadgu_bilik">ئەر 1</option>
+                    <option value="facebook/mms-tts-uig-script_arabic">ئەر 2</option>
+                </select>
+            </div>
+
+            <!-- VV بۆلىكى (دەسلەپتە يوشۇرۇن) -->
+            <div class="for_vv" aria-hidden="true">
+                <select name="model" id="modelSelectVV" required>
+                    <option value="VV_CV_Unique_Ug">مەقسۇم (VV)</option>
+                    <option value="VV_Radio_RVC_ALI_Ug">ئەلى (VV)</option>
+                </select>
+
+                <div class="cfg">
+                    <label for="cfgScale">ھىسىيات: <span id="cfgVal">1.3</span></label>
+                    <input type="range" id="cfgScale" name="cfg_scale" min="1" max="2" step="0.01" value="1.3"
+                        disabled />
+                </div>
+            </div>
+
             <button type="submit" id="synthesizeBtn">ئاۋازغا
                 <div class="loading-animation"></div>
             </button>
@@ -74,7 +92,7 @@
             <thead>
                 <tr>
                     <th>تېكىست</th>
-                    <th>ئاۋاز</th>
+                    <!-- <th>ئاۋاز</th> -->
                 </tr>
             </thead>
             <tbody>
@@ -82,9 +100,11 @@
                     <td>بىر ئامېرىكا دوللىرىنى ئالماشتۇرۇش قىممىتى 371.25 گىرىن (تەخمىنەن 24.057 گرام) ساپ كۈمۈش ياكى 24.75 گىرىن (تەخمىنەن 1.6038 گرام) ساپ ئالتۇن بولۇپ ، 1873-يىلىغىچە داۋاملاشقان.</td>
                     <td>ئەلى</td>
                 </tr> -->
-                <tr class="example-row" data-text="ھەممە ئادەم ئەركىن بولۇپ تۇغۇلىدۇ، ھەمدە ئىززەت-ھۆرمەت ۋە ھوقۇقتا باب باراۋەر بولىدۇ." data-model="piyazon/TTS-CV-Unique-Ug-2">
+                <tr class="example-row"
+                    data-text="ھەممە ئادەم ئەركىن بولۇپ تۇغۇلىدۇ، ھەمدە ئىززەت-ھۆرمەت ۋە ھوقۇقتا باب باراۋەر بولىدۇ."
+                    data-model="piyazon/TTS-CV-Unique-Ug-2">
                     <td>ھەممە ئادەم ئەركىن بولۇپ تۇغۇلىدۇ، ھەمدە ئىززەت-ھۆرمەت ۋە ھوقۇقتا باب باراۋەر بولىدۇ.</td>
-                    <td>مەقسۇم</td>
+                    <!-- <td>مەقسۇم</td> -->
                 </tr>
                 <!-- <tr class="example-row" data-text="مەركەز ئورگانلىرى ۋە مەركەزگە بىۋاسىتە قاراشلىق ئاپپاراتلارغا 2026-يىللىق ئىمتىھان ئارقىلىق مەمۇر قوبۇل قىلىش خىزمىتى ئەتە باشلىنىدۇ، جەمئىي 38 مىڭ 100 ئادەم قوبۇل قىلىش پىلانلاندى." data-model="piyazon/TTS-Radio-Ug">
                     <td>مەركەز ئورگانلىرى ۋە مەركەزگە بىۋاسىتە قاراشلىق ئاپپاراتلارغا 2026-يىللىق ئىمتىھان ئارقىلىق مەمۇر قوبۇل قىلىش خىزمىتى ئەتە باشلىنىدۇ، جەمئىي 38 مىڭ 100 ئادەم قوبۇل قىلىش پىلانلاندى.</td>
@@ -94,13 +114,18 @@
                     <td>بۇ پىلان مەن كېچە-كۈندۈز ئارزۇ قىلىپ كېلىۋاتقان ئۈچ چوڭ نىشانىمنى ئۆز ئىچىگە ئالىدۇ، ئۇلار ھاياتىمدىكى ئەڭ چوك ئارمانلىرىم ئىدى.</td>
                     <td>گۈزەلنۇر روزى</td>
                 </tr> -->
-                <tr class="example-row" data-text="بۇ دۆلەت مەمۇرلۇق ئىمتىھانىنىڭ ياش چەكلىمىسى تۇنجى قېتىم 35 ياشلىق ياش چەكلىمىسىنى بۇزۇپ تاشلىغانلىقىدىن دېرەك بېرىدۇ." data-model="piyazon/qutadgu_bilik">
-                    <td>بۇ دۆلەت مەمۇرلۇق ئىمتىھانىنىڭ ياش چەكلىمىسى تۇنجى قېتىم 35 ياشلىق ياش چەكلىمىسىنى بۇزۇپ تاشلىغانلىقىدىن دېرەك بېرىدۇ.</td>
-                    <td>ئەر 1</td>
+                <tr class="example-row"
+                    data-text="بۇ دۆلەت مەمۇرلۇق ئىمتىھانىنىڭ ياش چەكلىمىسى تۇنجى قېتىم 35 ياشلىق ياش چەكلىمىسىنى بۇزۇپ تاشلىغانلىقىدىن دېرەك بېرىدۇ."
+                    data-model="piyazon/qutadgu_bilik">
+                    <td>بۇ دۆلەت مەمۇرلۇق ئىمتىھانىنىڭ ياش چەكلىمىسى تۇنجى قېتىم 35 ياشلىق ياش چەكلىمىسىنى بۇزۇپ
+                        تاشلىغانلىقىدىن دېرەك بېرىدۇ.</td>
+                    <!-- <td>ئەر 1</td> -->
                 </tr>
-                <tr class="example-row" data-text="بىز ئىنسانلارنىڭ ھەممىسى بىرلىكتە ياشايمىز. ھەر بىر ئادەم ئۆزىنىڭ يولىنى تاللىيالايدۇ." data-model="facebook/mms-tts-uig-script_arabic">
+                <tr class="example-row"
+                    data-text="بىز ئىنسانلارنىڭ ھەممىسى بىرلىكتە ياشايمىز. ھەر بىر ئادەم ئۆزىنىڭ يولىنى تاللىيالايدۇ."
+                    data-model="facebook/mms-tts-uig-script_arabic">
                     <td>بىز ئىنسانلارنىڭ ھەممىسى بىرلىكتە ياشايمىز. ھەر بىر ئادەم ئۆزىنىڭ يولىنى تاللىيالايدۇ.</td>
-                    <td>ئەر 2</td>
+                    <!-- <td>ئەر 2</td> -->
                 </tr>
                 <!-- <tr class="example-row" data-text="你好 دىگەن سۆزنىڭ ئۇيغۇرچە مەنىسى بولسا «ياخشىمۇسىز»." data-model="piyazon/TTS-CV-Radio-RVC-Alikurban-Ug">
                     <td>你好 دىگەن سۆزنىڭ ئۇيغۇرچە مەنىسى بولسا «ياخشىمۇسىز».</td>
@@ -115,6 +140,43 @@
     </div>
 
     <script src="tts.js"></script>
+
+    <script>
+        const modeSelect = document.getElementById('modeSelect');
+        const vitsDiv = document.querySelector('.for_vits');
+        const vvDiv = document.querySelector('.for_vv');
+        const cfgInput = document.getElementById('cfgScale');
+        const cfgVal = document.getElementById('cfgVal');
+
+        // Update displayed value while sliding
+        cfgInput.addEventListener('input', () => {
+            cfgVal.textContent = cfgInput.value;
+        });
+
+        // Switch blocks + enable/disable cfg
+        function updateUI() {
+            const isVV = modeSelect.value === 'VV';
+
+            // Visibility
+            vitsDiv.classList.toggle('visible', !isVV);
+            vvDiv.classList.toggle('visible', isVV);
+
+            // Accessibility
+            vitsDiv.setAttribute('aria-hidden', isVV);
+            vvDiv.setAttribute('aria-hidden', !isVV);
+
+            // Enable cfg only for VV
+            cfgInput.disabled = !isVV;
+        }
+
+        // Run on change
+        modeSelect.addEventListener('change', updateUI);
+
+        // Initial state (VITS selected by default)
+        updateUI();
+    </script>
+
+
 </body>
 
 </html>

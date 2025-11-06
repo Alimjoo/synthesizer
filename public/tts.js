@@ -1,6 +1,6 @@
 // tts.js
 
-const WORD_LIMIT = 100;
+const WORD_LIMIT = 30;
 
 const form = document.getElementById('ttsForm');
 const textarea = document.getElementById('inputarea');
@@ -43,16 +43,21 @@ document.querySelectorAll('.example-row').forEach(row => {
     row.addEventListener('click', () => {
         const text = row.getAttribute('data-text');
         const model = row.getAttribute('data-model');
-        
+
         document.getElementById('inputarea').value = text;
-        document.getElementById('modelSelect').value = model;
-        
+        // document.getElementById('modelSelect').value = model;
+
         updateWordCount();
         // Optional: Update word count if your tts.js has that logic
         // You can trigger any existing word count function here if needed
     });
 });
-
+function getActiveModelSelect() {
+    if (modeSelect.value === 'VV') {
+        return document.getElementById('modelSelectVV');   // VV block
+    }
+    return document.getElementById('modelSelectVits');     // VITS block
+}
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('ttsForm');
     const audioPlayer = document.getElementById('audioPlayer');
@@ -68,21 +73,42 @@ document.addEventListener('DOMContentLoaded', () => {
         synthesizeBtn.textContent = 'ئاۋازغا ئايلىنىۋاتىدۇ...';
 
         const formData = new FormData(form);
-        const text = formData.get('text');
-        const model = formData.get('model');
+        const text = formData.get('text').trim();
+        const model = getActiveModelSelect().value;
+        const mode = formData.get('mode');
+        const cfgScale = mode === 'VV'
+            ? document.getElementById('cfgScale').value
+            : null;
 
         try {
-            const response = await fetch('/tts', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    text,
-                    model,
-                }),
-            });
-
+            let response;
+            if (mode === 'VITS') {
+                response = await fetch('/tts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        text,
+                        model,
+                    }),
+                });
+            }else if (mode === 'VV' ){
+                response = await fetch('/tts_vv', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        text,
+                        model,
+                        cfgScale,
+                    }),
+                });
+            }
+            else{
+                throw new Error('قۇرۇلما خاتا!');
+            }
             if (!response.ok) {
                 const error = await response.json();
                 throw new Error(error.error || 'Failed to synthesize audio');

@@ -35,6 +35,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 
 const API_URL = 'https://piyazon-ug-tts-api.hf.space/synthesize';
+const API_URL_VV = 'https://piyazon-uyghur-vibevoice.hf.space/synthesize';
 
 // New POST endpoint to proxy the TTS synthesis
 app.post('/tts', async (req, res) => {
@@ -69,6 +70,56 @@ app.post('/tts', async (req, res) => {
         const streamPipeline = promisify(pipeline);
         await streamPipeline(response.body, res);
     } catch (error) {
+        console.error('TTS synthesis error:', error);
+        res.status(500).json({ error: error.message || 'Internal server error' });
+    }
+});
+
+app.post('/tts_vv', async (req, res) => {
+    const { text, model, cfgScale } = req.body;
+
+    if (!text) {
+        return res.status(400).json({ error: 'Missing required field: text' });
+    }
+
+    const form = new FormData();
+    form.append('text', text);
+    form.append('checkpoint_path_name', model);
+    form.append('cfg_scale', cfgScale);
+    form.append('hf_token', HF_TOKEN);
+
+    // ---------- 2. Timeout controller ----------
+    const TIMEOUT_MS = 5 * 60 * 1000;                 // 5 minutes (adjust as needed)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+    try {
+        const response = await fetch(API_URL_VV, {
+            method: 'POST',
+            body: form,
+            headers: form.getHeaders(),
+            signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`API error: ${response.status} - ${errorText}`);
+        }
+
+        // Set headers for audio response
+        res.setHeader('Content-Type', 'audio/wav');
+        res.setHeader('Content-Disposition', 'attachment; filename=speech.wav');
+
+        // Stream the response directly to the client
+        const streamPipeline = promisify(pipeline);
+        await streamPipeline(response.body, res);
+    } catch (error) {
+        clearTimeout(timeoutId);
+        if (err.name === 'AbortError') {
+            console.warn('TTS request timed out after', TIMEOUT_MS / 1000, 'seconds');
+            return res.status(504).json({ error: 'Synthesis timed out – try a shorter text or a faster model' });
+        }
         console.error('TTS synthesis error:', error);
         res.status(500).json({ error: error.message || 'Internal server error' });
     }
